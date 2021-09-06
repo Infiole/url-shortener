@@ -1,0 +1,36 @@
+{% extends 'shrinker/base.html' %} 
+
+{% block body %}
+
+<div class="container">
+  <div class="card mt-5 border-0">
+    <h1 class="text-center">URL Shortener</h1>
+      <form action="" method="POST">
+        {% csrf_token %}
+          <div>{{form.long_url}}</div>
+          <div class="mt-2">
+            <button class="btn btn-success btn-lg w-100" type="submit">
+              Shrink!
+            </button>
+          </div>
+        </div>
+      </form>
+  </div>
+
+  {% if errors %}
+  <div class="alert alert-danger mt-3" role="alert">
+    <p>{{errors}}</p>
+  </div>
+  {% endif %}
+
+  {% if shrinked_url %}
+  <div class="mx-auto text-center mt-4">
+    <h2 class="text-success">Your URL has been successfully shrinked!</h2>
+    <h5><span class="text-success">New URL: </span>{{shrinked_url}}</p>
+    <h5><span class="text-danger">Old URL: </span> {{long_url}}</p>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock body %}
