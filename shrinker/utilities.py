@@ -5,4 +5,4 @@ import string
 characters = string.ascii_letters + string.digits
 
 def generate_short_url():
-  return ''.join(np.random.choices(characters, k=7))
+  return ''.join(np.random.choice(characters, 7, False))
