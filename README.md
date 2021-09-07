@@ -10,9 +10,14 @@ django-environ==0.6.0
 numpy==1.21.2
 ```
 
+---
+
+
+
 Steps required to run locally after pulling code:
 
 1. Run Django migrations to setup models
+
    ```bash
    python manage.py makemigrations
    python manage.py makemigrations shrinker
@@ -24,3 +29,13 @@ Steps required to run locally after pulling code:
    python manage.py runserver
    ```
 3. Enjoy shrinking urls!
+
+---
+
+
+
+Steps to run local tests:
+
+```bash
+python manage.py test shrinker.tests
+```
