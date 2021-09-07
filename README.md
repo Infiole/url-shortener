@@ -7,12 +7,11 @@ Required packages
 ```bash
 Django==3.2.7
 django-environ==0.6.0
+google-cloud-secret-manager==2.7.0
 numpy==1.21.2
 ```
 
 ---
-
-
 
 Steps required to run locally after pulling code:
 
@@ -31,8 +30,6 @@ Steps required to run locally after pulling code:
 3. Enjoy shrinking urls!
 
 ---
-
-
 
 Steps to run local tests:
 
