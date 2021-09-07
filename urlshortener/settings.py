@@ -10,23 +10,16 @@ print(BASE_DIR)
 # [START gaestd_py_django_secret_config]
 env = environ.Env(DEBUG=(bool, False))
 env_file = os.path.join(BASE_DIR, ".env")
+default_flag = True
 
 if os.path.isfile(env_file):
     # Use a local secret file, if provided
-
+    default_flag = False
     env.read_env(env_file)
-# [START_EXCLUDE]
-elif os.getenv("TRAMPOLINE_CI", None):
-    # Create local settings if running with CI, for unit testing
 
-    placeholder = (
-        f"SECRET_KEY=test\n"
-        f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
-    )
-    env.read_env(io.StringIO(placeholder))
-# [END_EXCLUDE]
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     # Pull secrets from Secret Manager
+    default_flag = False
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
     client = secretmanager.SecretManagerServiceClient()
@@ -36,7 +29,12 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
     env.read_env(io.StringIO(payload))
 else:
-    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+    # Create local settings if running normally
+    placeholder = (
+        f"SECRET_KEY=test\n"
+        f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
+    )
+    env.read_env(io.StringIO(placeholder))
 # [END gaestd_py_django_secret_config]
 
 SECRET_KEY = env("SECRET_KEY")
@@ -96,7 +94,8 @@ WSGI_APPLICATION = "urlshortener.wsgi.application"
 # [START db_setup]
 # [START gaestd_py_django_database_config]
 # Use django-environ to parse the connection string
-DATABASES = {"default": env.db()}
+if not default_flag:
+    DATABASES = {"default": env.db()}
 
 # If the flag as been set, configure to use proxy
 if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
@@ -106,9 +105,8 @@ if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
 # [END gaestd_py_django_database_config]
 # [END db_setup]
 
-# Use a in-memory sqlite3 database when testing in CI systems
-# TODO(glasnt) CHECK IF THIS IS REQUIRED because we're setting a val above
-if os.getenv("TRAMPOLINE_CI", None):
+# Use a in-memory sqlite3 database
+if default_flag:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
