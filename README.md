@@ -29,7 +29,7 @@ Steps required to run locally after pulling code:
    ```bash
    python manage.py runserver
    ```
-3. Enjoy shrinking urls!
+3. Open generated link and enjoy shrinking urls!
 
 ---
 
