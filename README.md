@@ -2,8 +2,6 @@
 
 ACE Coding Exercise: URL Shortener
 
-Deployed at: https://url-shortener-325007.as.r.appspot.com/
-
 Required packages
 
 ```bash
